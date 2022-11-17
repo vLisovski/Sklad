@@ -34,21 +34,21 @@ public class SQLMethods {
     public void insertProduct(String name, int count) throws SQLException {
         Statement statement = connection.createStatement();
         String insertQuery = String.format("INSERT INTO products (name,count) VALUES ('%s',%d) ", name, count);
-        statement.executeQuery(insertQuery);
+        statement.executeUpdate(insertQuery);
         statement.close();
     }
 
     public void updateProduct(String name, int count) throws SQLException {
         Statement statement = connection.createStatement();
         String updateQuery = String.format("UPDATE products SET count=%d WHERE name = '%s'", count, name);
-        statement.executeQuery(updateQuery);
+        statement.executeUpdate(updateQuery);
         statement.close();
     }
 
     public void deleteProduct(String name) throws SQLException {
         Statement statement = connection.createStatement();
         String updateQuery = String.format("DELETE FROM products WHERE name = '%s' ", name);
-        statement.executeQuery(updateQuery);
+        statement.executeUpdate(updateQuery);
         statement.close();
     }
 
@@ -140,7 +140,7 @@ public class SQLMethods {
     public void deleteOrderById(int id) throws SQLException {
         Statement statement = connection.createStatement();
         String deleteQuery = String.format("DELETE FROM orders WHERE id=%d",id);
-        statement.executeQuery(deleteQuery);
+        statement.executeUpdate(deleteQuery);
         statement.close();
     }
 

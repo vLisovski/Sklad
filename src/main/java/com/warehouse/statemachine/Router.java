@@ -1,10 +1,11 @@
 package com.warehouse.statemachine;
 
 import com.warehouse.entities.ProductPosition;
-import com.warehouse.sqlclasses.DbManager;
 import com.warehouse.sqlclasses.UserService;
 import com.warehouse.strings.Strings;
 import org.postgresql.util.PSQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -40,18 +41,17 @@ public class Router {
     private SendMessage routeOrderCollected(Update update) throws Exception {
         int id = Integer.parseInt(update.getMessage().getText());
 
-        try {
-            userService.deleteOrderById(id);
-        } catch (PSQLException e) {
-            String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
+        userService.deleteOrderById(id);
 
-            StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+        String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
 
-            return PageMap.getInstance()
+        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+
+        return PageMap.getInstance()
                     .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
                     .someProcess(retrieveText, update.getMessage().getChatId());
-        }
-        return new SendMessage();
+
+
     }
 
     private SendMessage routeAddToWarehouse(Update update) throws Exception {
@@ -62,59 +62,44 @@ public class Router {
 
         if (!(userService.findProductByName(productName))) {
 
-            try {
-                userService.insertProduct(productName, count);
-            } catch (PSQLException e) {
+            userService.insertProduct(productName, count);
 
-                String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
-                StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-                return PageMap.getInstance()
-                        .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                        .someProcess(retrieveText, update.getMessage().getChatId());
-            }
+            String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
+            StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+            return PageMap.getInstance()
+                    .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                    .someProcess(retrieveText, update.getMessage().getChatId());
+
         } else {
 
             int currentCount = userService.selectProductCount(productName);
-            try {
-                userService.updateProduct(productName, currentCount + count);
-            } catch (PSQLException e) {
 
-                String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
+            userService.updateProduct(productName, currentCount + count);
+            String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
+            StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
 
-                StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+            return PageMap.getInstance()
+                    .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                    .someProcess(retrieveText, update.getMessage().getChatId());
 
-                return PageMap.getInstance()
-                        .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                        .someProcess(retrieveText, update.getMessage().getChatId());
-            }
         }
-        return new SendMessage();
     }
 
     private SendMessage routeRemoveFromWarehouse(Update update) throws Exception {
         String receivedText = update.getMessage().getText();
         String productName = receivedText.replaceAll("\\d", "").trim();
-        System.out.println(productName);
         String countAsString = receivedText.replaceAll("\\D", "").trim();
+
         int count = Integer.parseInt(countAsString);
         int currenCount = userService.selectProductCount(productName);
-        System.out.println(currenCount);
         String retrieveText;
 
         if (!(count < currenCount)) {
             userService.deleteProduct(productName);
-            retrieveText = "Product deletion " + productName + " " + count + " completed.\n\nChoose action:";
+            retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed. Product has deleted.\n\nChoose action:";
         } else {
-            try {
-                userService.updateProduct(productName, currenCount - count);
-            } catch (PSQLException e) {
-                retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action:";
-                StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-                return PageMap.getInstance()
-                        .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                        .someProcess(retrieveText, update.getMessage().getChatId());
-            }
-            retrieveText = "Reducing the quantity of goods " + productName + " by " + (currenCount - count) + " units completed.\n\nChoose action";
+            userService.updateProduct(productName, currenCount - count);
+            retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action";
         }
 
         StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
@@ -166,19 +151,25 @@ public class Router {
         String chat_id = "";
 
         if (!update.hasCallbackQuery()) {
+
             if (update.getMessage().getText().equals("/start")) {
+
                 return routeStart(update);
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
                     .equals(States.ORDER_COLLECTED.toString())) {
+
                 return routeOrderCollected(update);
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
                     .equals(States.ADD_TO_WAREHOUSE.toString())) {
+
                 return routeAddToWarehouse(update);
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
                     .equals(States.REMOVE_FROM_WAREHOUSE.toString())) {
+
                 return routeRemoveFromWarehouse(update);
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
                     .equals(States.SEARCH_PRODUCT.toString())) {
+
                 return routeSearchProduct(update);
             }
         } else if (update.hasCallbackQuery()) {
@@ -188,11 +179,13 @@ public class Router {
 
             if (StateMap.getInstance().getState(update.getCallbackQuery().getMessage().getChatId()).toString()
                     .equals(States.MAIN_MENU.toString())) {
+
                 return PageMap.getInstance()
                         .getPageByKey(StateMap.getInstance().getState(Long.parseLong(chat_id)).toString())
                         .someProcess(Strings.MAIN_MENU_TEXT,
                                 update.getCallbackQuery().getMessage().getChatId());
             } else {
+
                 return PageMap.getInstance()
                         .getPageByKey(StateMap.getInstance().getState(Long.parseLong(chat_id)).toString())
                         .someProcess("",
