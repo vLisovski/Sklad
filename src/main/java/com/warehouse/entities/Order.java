@@ -4,27 +4,27 @@ import java.util.List;
 
 public class Order {
     private int id;
-    private String productPositionList;
+    private String description;
 
-    public Order(int id, String productPositionList) {
+    public Order(int id, String description) {
         this.id = id;
-        this.productPositionList = productPositionList;
+        this.description = description;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setProductList(String productPositionList) {
-        this.productPositionList = productPositionList;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getProductList() {
-        return productPositionList;
+    public String getDescription() {
+        return description;
     }
 
 }

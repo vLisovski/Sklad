@@ -15,6 +15,6 @@ public class Strings {
 
     public final static String ORDER_COLLECTED_TEXT = "¬ведите id заказа:";
     public final static String ADD_TO_WAREHOUSE_TEXT = "ƒобавление на склад.\n"+"¬ведите текст по шаблону:\n"+"им€_товара количество";
-    public final static String REMOVE_FROM_WAREHOUSE_TEXT = "¬ведите товар, который нужно убрать по шаблону:\n"+"id_товара количество";
+    public final static String REMOVE_FROM_WAREHOUSE_TEXT = "¬ведите товар, который нужно убрать по шаблону:\n"+"им€_товара количество";
     public final static String SEARCH_PRODUCT = "¬ведите товар, который нужно найти по имени или id:";
 }

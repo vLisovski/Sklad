@@ -76,7 +76,8 @@ public class SQLMethods {
         List<ProductPosition> productPositions = new ArrayList<>();
 
         Statement statement = connection.createStatement();
-        String selectQuery = String.format("SELECT * FROM products WHERE name LIKE '%s' ", "'%" + name + "%'");
+        String pfpf = "%" + name + "%";
+        String selectQuery = String.format("SELECT * FROM products WHERE name LIKE '%s' ", pfpf );
         ResultSet resultSet = statement.executeQuery(selectQuery);
 
         while (resultSet.next()) {
@@ -138,7 +139,7 @@ public class SQLMethods {
 
     public void deleteOrderById(int id) throws SQLException {
         Statement statement = connection.createStatement();
-        String deleteQuery = String.format("DELETE FROM orders WHERE id=%d");
+        String deleteQuery = String.format("DELETE FROM orders WHERE id=%d",id);
         statement.executeQuery(deleteQuery);
         statement.close();
     }

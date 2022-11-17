@@ -1,10 +1,13 @@
 package com.warehouse.statemachine;
 
+import com.warehouse.entities.Order;
+import com.warehouse.sqlclasses.DbManager;
 import com.warehouse.strings.Strings;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,9 +91,24 @@ public class PageMap {
         return message;
     }
 
-    private SendMessage currentOrdersMenu(String text, long chat_id) {
+    private SendMessage currentOrdersMenu(String text, long chat_id) throws SQLException {
         SendMessage message = new SendMessage();
-        message.setText(text);
+
+        List<Order> orders = DbManager.getInstance().getSqlMethods().selectOrders();
+
+        StringBuilder output = new StringBuilder();
+        output.append("Текущие заказы:\n");
+        for (int i = 0; i < orders.size(); i++) {
+            String description = orders.get(i).getDescription();
+            int id = orders.get(i).getId();
+
+            output.append(id)
+                    .append(" ")
+                    .append(description)
+                    .append("\n");
+        }
+
+        message.setText(output.toString());
         message.setChatId(chat_id);
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
@@ -159,9 +177,15 @@ public class PageMap {
         return message;
     }
 
-    private SendMessage tasksList(String text, long chat_id) {
+    private SendMessage tasksList(String text, long chat_id) throws SQLException {
         SendMessage message = new SendMessage();
-        message.setText(text);
+
+        List<String> tasks = DbManager.getInstance().getSqlMethods().selectTasks();
+        String output="";
+        for (int i = 0; i < tasks.size(); i++) {
+            output = output + "\n" + tasks.get(i);
+        }
+        message.setText(output);
         message.setChatId(chat_id);
         return message;
     }
