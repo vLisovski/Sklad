@@ -24,8 +24,8 @@ public class Router {
         return instance;
     }
 
-    //TODO разбить метод Route на подметоды
-    //TODO правильно реализовать UserService
+    //TODO Route
+    //TODO UserService
     public SendMessage route(Update update) throws Exception {
 
         String chat_id = "";
@@ -41,7 +41,7 @@ public class Router {
                         .someProcess(update.getMessage().getText(), update.getMessage().getChatId());
 
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.ORDER_COLLECTED.toString())) { //заказ собран
+                    .equals(States.ORDER_COLLECTED.toString())) {
 
                 int id = Integer.parseInt(update.getMessage().getText());
 
@@ -58,7 +58,7 @@ public class Router {
                 }
 
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.ADD_TO_WAREHOUSE.toString())) { //добавить на склад
+                    .equals(States.ADD_TO_WAREHOUSE.toString())) {
 
                 String receivedText = update.getMessage().getText();
                 String productName = receivedText.replaceAll("\\d", "").trim();
@@ -94,7 +94,7 @@ public class Router {
                     }
                 }
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.REMOVE_FROM_WAREHOUSE.toString())) { //убрать со склада
+                    .equals(States.REMOVE_FROM_WAREHOUSE.toString())) {
 
                 String receivedText = update.getMessage().getText();
                 String productName = receivedText.replaceAll("\\d", "").trim();
@@ -127,7 +127,7 @@ public class Router {
                         .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
                         .someProcess(retrieveText, update.getMessage().getChatId());
             } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.SEARCH_PRODUCT.toString())) {//найти товар
+                    .equals(States.SEARCH_PRODUCT.toString())) {
 
                 String receivedText = update.getMessage().getText();
                 String productName = receivedText.replaceAll("\\d", "").trim();
