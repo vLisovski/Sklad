@@ -24,144 +24,158 @@ public class Router {
         return instance;
     }
 
-    //TODO Route
-    //TODO UserService
-    public SendMessage route(Update update) throws Exception {
-
+    private SendMessage routeStart(Update update) throws Exception {
         String chat_id = "";
+        StateMap.getInstance().putState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+        chat_id = update.getMessage().getChatId().toString();
 
-        if (!update.hasCallbackQuery()) {
-            if (update.getMessage().getText().equals("/start")) {
+        return PageMap.getInstance()
+                .getPageByKey(StateMap.getInstance().getState(Long.parseLong(chat_id)).toString())
+                .someProcess(update.getMessage().getText(), update.getMessage().getChatId());
+    }
 
-                StateMap.getInstance().putState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-                chat_id = update.getMessage().getChatId().toString();
+    private SendMessage routeOrderCollected(Update update) throws Exception {
+        int id = Integer.parseInt(update.getMessage().getText());
 
+        try {
+            DbManager.getInstance().getSqlMethods().deleteOrderById(id);
+        } catch (PSQLException e) {
+            String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
+
+            StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+
+            return PageMap.getInstance()
+                    .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                    .someProcess(retrieveText, update.getMessage().getChatId());
+        }
+        return new SendMessage();
+    }
+
+    private SendMessage routeAddToWarehouse(Update update) throws Exception {
+        String receivedText = update.getMessage().getText();
+        String productName = receivedText.replaceAll("\\d", "").trim();
+        String countAsString = receivedText.replaceAll("\\D", "").trim();
+        int count = Integer.parseInt(countAsString);
+
+        if (!(DbManager.getInstance().getSqlMethods().findProductByName(productName))) {
+
+            try {
+                DbManager.getInstance().getSqlMethods().insertProduct(productName, count);
+            } catch (PSQLException e) {
+
+                String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
+                StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
                 return PageMap.getInstance()
-                        .getPageByKey(StateMap.getInstance().getState(Long.parseLong(chat_id)).toString())
-                        .someProcess(update.getMessage().getText(), update.getMessage().getChatId());
+                        .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                        .someProcess(retrieveText, update.getMessage().getChatId());
+            }
+        } else {
 
-            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.ORDER_COLLECTED.toString())) {
+            int currentCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
+            try {
+                DbManager.getInstance().getSqlMethods().updateProduct(productName, currentCount + count);
+            } catch (PSQLException e) {
 
-                int id = Integer.parseInt(update.getMessage().getText());
-
-                try {
-                    DbManager.getInstance().getSqlMethods().deleteOrderById(id);
-                } catch (PSQLException e) {
-                    String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
-
-                    StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-
-                    return PageMap.getInstance()
-                            .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                            .someProcess(retrieveText, update.getMessage().getChatId());
-                }
-
-            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.ADD_TO_WAREHOUSE.toString())) {
-
-                String receivedText = update.getMessage().getText();
-                String productName = receivedText.replaceAll("\\d", "").trim();
-                String countAsString = receivedText.replaceAll("\\D", "").trim();
-                int count = Integer.parseInt(countAsString);
-
-                if (!(DbManager.getInstance().getSqlMethods().findProductByName(productName))) {
-
-                    try {
-                        DbManager.getInstance().getSqlMethods().insertProduct(productName, count);
-                    } catch (PSQLException e) {
-
-                        String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
-                        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-                        return PageMap.getInstance()
-                                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                                .someProcess(retrieveText, update.getMessage().getChatId());
-                    }
-                } else {
-
-                    int currentCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
-                    try {
-                        DbManager.getInstance().getSqlMethods().updateProduct(productName, currentCount + count);
-                    } catch (PSQLException e) {
-
-                        String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
-
-                        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-
-                        return PageMap.getInstance()
-                                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                                .someProcess(retrieveText, update.getMessage().getChatId());
-                    }
-                }
-            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.REMOVE_FROM_WAREHOUSE.toString())) {
-
-                String receivedText = update.getMessage().getText();
-                String productName = receivedText.replaceAll("\\d", "").trim();
-                System.out.println(productName);
-                String countAsString = receivedText.replaceAll("\\D", "").trim();
-                int count = Integer.parseInt(countAsString);
-                int currenCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
-                System.out.println(currenCount);
-                String retrieveText;
-
-                if (!(count < currenCount)) {
-                    DbManager.getInstance().getSqlMethods().deleteProduct(productName);
-                    retrieveText = "Product deletion " + productName + " " + count + " completed.\n\nChoose action:";
-                } else {
-                    try {
-                        DbManager.getInstance().getSqlMethods().updateProduct(productName, currenCount - count);
-                    } catch (PSQLException e) {
-                        retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action:";
-                        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-                        return PageMap.getInstance()
-                                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                                .someProcess(retrieveText, update.getMessage().getChatId());
-                    }
-                    retrieveText = "Reducing the quantity of goods " + productName + " by " + (currenCount - count) + " units completed.\n\nChoose action";
-                }
+                String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
 
                 StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
 
                 return PageMap.getInstance()
                         .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
                         .someProcess(retrieveText, update.getMessage().getChatId());
-            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
-                    .equals(States.SEARCH_PRODUCT.toString())) {
+            }
+        }
+        return new SendMessage();
+    }
 
-                String receivedText = update.getMessage().getText();
-                String productName = receivedText.replaceAll("\\d", "").trim();
-                String idAsString = receivedText.replaceAll("\\D", "").trim();
-                List<ProductPosition> products = null;
+    private SendMessage routeRemoveFromWarehouse(Update update) throws Exception {
+        String receivedText = update.getMessage().getText();
+        String productName = receivedText.replaceAll("\\d", "").trim();
+        System.out.println(productName);
+        String countAsString = receivedText.replaceAll("\\D", "").trim();
+        int count = Integer.parseInt(countAsString);
+        int currenCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
+        System.out.println(currenCount);
+        String retrieveText;
 
-                if (productName.length() != 0) {
-                    products = DbManager.getInstance().getSqlMethods().selectProductsByName(productName);
-                } else if (idAsString.length() != 0) {
-                    int id = Integer.parseInt(idAsString);
-                    products = DbManager.getInstance().getSqlMethods().selectProductsById(id);
-                }
-
-                StringBuilder retrieveText = new StringBuilder();
-
-                for (int i = 0; i < products.size(); i++) {
-                    String name = products.get(i).getName();
-                    int count = products.get(i).getCount();
-                    int pId = products.get(i).getId();
-
-                    retrieveText.append(pId)
-                            .append(" ")
-                            .append(name)
-                            .append(" ")
-                            .append(count)
-                            .append("\n");
-                }
-
-                retrieveText.append("\nChoose action:");
+        if (!(count < currenCount)) {
+            DbManager.getInstance().getSqlMethods().deleteProduct(productName);
+            retrieveText = "Product deletion " + productName + " " + count + " completed.\n\nChoose action:";
+        } else {
+            try {
+                DbManager.getInstance().getSqlMethods().updateProduct(productName, currenCount - count);
+            } catch (PSQLException e) {
+                retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action:";
                 StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
-
                 return PageMap.getInstance()
                         .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                        .someProcess(retrieveText.toString(), update.getMessage().getChatId());
+                        .someProcess(retrieveText, update.getMessage().getChatId());
+            }
+            retrieveText = "Reducing the quantity of goods " + productName + " by " + (currenCount - count) + " units completed.\n\nChoose action";
+        }
+
+        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+
+        return PageMap.getInstance()
+                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                .someProcess(retrieveText, update.getMessage().getChatId());
+    }
+
+    private SendMessage routeSearchProduct(Update update) throws Exception {
+        String receivedText = update.getMessage().getText();
+        String productName = receivedText.replaceAll("\\d", "").trim();
+        String idAsString = receivedText.replaceAll("\\D", "").trim();
+        List<ProductPosition> products = null;
+
+        if (productName.length() != 0) {
+            products = DbManager.getInstance().getSqlMethods().selectProductsByName(productName);
+        } else if (idAsString.length() != 0) {
+            int id = Integer.parseInt(idAsString);
+            products = DbManager.getInstance().getSqlMethods().selectProductsById(id);
+        }
+
+        StringBuilder retrieveText = new StringBuilder();
+
+        if(products!=null){
+            for (int i = 0; i < products.size(); i++) {
+                String name = products.get(i).getName();
+                int count = products.get(i).getCount();
+                int pId = products.get(i).getId();
+
+                retrieveText.append(pId)
+                        .append(" ")
+                        .append(name)
+                        .append(" ")
+                        .append(count)
+                        .append("\n");
+            }
+        }
+        retrieveText.append("\nChoose action:");
+        StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
+
+        return PageMap.getInstance()
+                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                .someProcess(retrieveText.toString(), update.getMessage().getChatId());
+    }
+    public SendMessage route(Update update) throws Exception {
+
+        String chat_id = "";
+
+        if (!update.hasCallbackQuery()) {
+            if (update.getMessage().getText().equals("/start")) {
+                return routeStart(update);
+            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
+                    .equals(States.ORDER_COLLECTED.toString())) {
+                return routeOrderCollected(update);
+            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
+                    .equals(States.ADD_TO_WAREHOUSE.toString())) {
+                return routeAddToWarehouse(update);
+            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
+                    .equals(States.REMOVE_FROM_WAREHOUSE.toString())) {
+                return routeRemoveFromWarehouse(update);
+            } else if (StateMap.getInstance().getState(update.getMessage().getChatId()).toString()
+                    .equals(States.SEARCH_PRODUCT.toString())) {
+                return routeSearchProduct(update);
             }
         } else if (update.hasCallbackQuery()) {
 
