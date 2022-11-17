@@ -97,7 +97,7 @@ public class PageMap {
         List<Order> orders = DbManager.getInstance().getSqlMethods().selectOrders();
 
         StringBuilder output = new StringBuilder();
-        output.append("Текущие заказы:\n");
+        output.append("Current orders:\n");
         for (int i = 0; i < orders.size(); i++) {
             String description = orders.get(i).getDescription();
             int id = orders.get(i).getId();

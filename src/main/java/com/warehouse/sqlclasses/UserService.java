@@ -12,7 +12,7 @@ public class UserService {
         try {
             dbManager = DbManager.getInstance();
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -20,7 +20,7 @@ public class UserService {
         try {
             dbManager.getSqlMethods().insertProduct(name, count);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -28,7 +28,7 @@ public class UserService {
         try {
             dbManager.getSqlMethods().updateProduct(name, count);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -36,7 +36,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().selectProductCount(name);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class UserService {
         try {
             dbManager.getSqlMethods().deleteProduct(name);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().selectProductsByName(name);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().selectProductsById(id);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().findProductByName(name);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().selectTasks();
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class UserService {
         try {
             return dbManager.getSqlMethods().selectOrders();
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class UserService {
         try {
             dbManager.getSqlMethods().deleteOrderById(id);
         } catch (Exception e) {
-            throw new Exception("Ошибка инициализации баз данных: " + e.getMessage());
+            throw new Exception("Database initialization error: " + e.getMessage());
         }
     }
 }
