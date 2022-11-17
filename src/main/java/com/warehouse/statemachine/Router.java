@@ -3,9 +3,6 @@ package com.warehouse.statemachine;
 import com.warehouse.entities.ProductPosition;
 import com.warehouse.sqlclasses.UserService;
 import com.warehouse.strings.Strings;
-import org.postgresql.util.PSQLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -16,7 +13,6 @@ public class Router {
         userService = new UserService();
     }
 
-    ;
     private static Router instance;
     private UserService userService;
 
@@ -48,8 +44,8 @@ public class Router {
         StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
 
         return PageMap.getInstance()
-                    .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
-                    .someProcess(retrieveText, update.getMessage().getChatId());
+                .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
+                .someProcess(retrieveText, update.getMessage().getChatId());
 
 
     }
