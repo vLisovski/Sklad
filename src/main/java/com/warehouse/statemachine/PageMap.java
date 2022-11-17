@@ -2,6 +2,7 @@ package com.warehouse.statemachine;
 
 import com.warehouse.entities.Order;
 import com.warehouse.sqlclasses.DbManager;
+import com.warehouse.sqlclasses.UserService;
 import com.warehouse.strings.Strings;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,17 +15,19 @@ import java.util.List;
 import java.util.Map;
 
 public class PageMap {
-    private Map<String, Processed> processes;
+    private final Map<String, Processed> processes;
+    private final UserService  userService;
 
-    private PageMap() {
-        this.processes = new HashMap<>();
-        this.processes.put(States.MAIN_MENU.toString(), this::mainMenuPage);
-        this.processes.put(States.CURRENT_ORDERS.toString(), this::currentOrdersMenu);
-        this.processes.put(States.ORDER_COLLECTED.toString(), this::orderCollected);
-        this.processes.put(States.ADD_TO_WAREHOUSE.toString(), this::addToWarehouse);
-        this.processes.put(States.REMOVE_FROM_WAREHOUSE.toString(), this::removeFromWarehouse);
-        this.processes.put(States.SEARCH_PRODUCT.toString(), this::searchProduct);
-        this.processes.put(States.TASK_LIST.toString(), this::tasksList);
+    private PageMap() throws Exception {
+        userService = new UserService();
+        processes = new HashMap<>();
+        processes.put(States.MAIN_MENU.toString(), this::mainMenuPage);
+        processes.put(States.CURRENT_ORDERS.toString(), this::currentOrdersMenu);
+        processes.put(States.ORDER_COLLECTED.toString(), this::orderCollected);
+        processes.put(States.ADD_TO_WAREHOUSE.toString(), this::addToWarehouse);
+        processes.put(States.REMOVE_FROM_WAREHOUSE.toString(), this::removeFromWarehouse);
+        processes.put(States.SEARCH_PRODUCT.toString(), this::searchProduct);
+        processes.put(States.TASK_LIST.toString(), this::tasksList);
     }
 
     private static PageMap instance;
@@ -91,10 +94,13 @@ public class PageMap {
         return message;
     }
 
-    private SendMessage currentOrdersMenu(String text, long chat_id) throws SQLException {
+    /**
+     * text is not used by this method, but must be passed
+     **/
+    private SendMessage currentOrdersMenu(String text, long chat_id) throws Exception {
         SendMessage message = new SendMessage();
 
-        List<Order> orders = DbManager.getInstance().getSqlMethods().selectOrders();
+        List<Order> orders = userService.selectOrders();
 
         StringBuilder output = new StringBuilder();
         output.append("Current orders:\n");
@@ -177,10 +183,13 @@ public class PageMap {
         return message;
     }
 
-    private SendMessage tasksList(String text, long chat_id) throws SQLException {
+    /**
+     * text is not used by this method, but must be passed
+     **/
+    private SendMessage tasksList(String text, long chat_id) throws Exception {
         SendMessage message = new SendMessage();
 
-        List<String> tasks = DbManager.getInstance().getSqlMethods().selectTasks();
+        List<String> tasks = userService.selectTasks();
         String output="";
         for (int i = 0; i < tasks.size(); i++) {
             output = output + "\n" + tasks.get(i);

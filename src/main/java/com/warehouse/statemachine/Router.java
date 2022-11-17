@@ -11,15 +11,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.List;
 
 public class Router {
-    private Router() {
+    private Router() throws Exception {
+        userService = new UserService();
     }
 
     ;
     private static Router instance;
+    private UserService userService;
 
     public static Router getInstance() throws Exception {
         if (instance == null) {
             instance = new Router();
+
         }
         return instance;
     }
@@ -38,7 +41,7 @@ public class Router {
         int id = Integer.parseInt(update.getMessage().getText());
 
         try {
-            DbManager.getInstance().getSqlMethods().deleteOrderById(id);
+            userService.deleteOrderById(id);
         } catch (PSQLException e) {
             String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
 
@@ -57,10 +60,10 @@ public class Router {
         String countAsString = receivedText.replaceAll("\\D", "").trim();
         int count = Integer.parseInt(countAsString);
 
-        if (!(DbManager.getInstance().getSqlMethods().findProductByName(productName))) {
+        if (!(userService.findProductByName(productName))) {
 
             try {
-                DbManager.getInstance().getSqlMethods().insertProduct(productName, count);
+                userService.insertProduct(productName, count);
             } catch (PSQLException e) {
 
                 String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
@@ -71,9 +74,9 @@ public class Router {
             }
         } else {
 
-            int currentCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
+            int currentCount = userService.selectProductCount(productName);
             try {
-                DbManager.getInstance().getSqlMethods().updateProduct(productName, currentCount + count);
+                userService.updateProduct(productName, currentCount + count);
             } catch (PSQLException e) {
 
                 String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
@@ -94,16 +97,16 @@ public class Router {
         System.out.println(productName);
         String countAsString = receivedText.replaceAll("\\D", "").trim();
         int count = Integer.parseInt(countAsString);
-        int currenCount = DbManager.getInstance().getSqlMethods().selectProductCount(productName);
+        int currenCount = userService.selectProductCount(productName);
         System.out.println(currenCount);
         String retrieveText;
 
         if (!(count < currenCount)) {
-            DbManager.getInstance().getSqlMethods().deleteProduct(productName);
+            userService.deleteProduct(productName);
             retrieveText = "Product deletion " + productName + " " + count + " completed.\n\nChoose action:";
         } else {
             try {
-                DbManager.getInstance().getSqlMethods().updateProduct(productName, currenCount - count);
+                userService.updateProduct(productName, currenCount - count);
             } catch (PSQLException e) {
                 retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action:";
                 StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
@@ -128,15 +131,15 @@ public class Router {
         List<ProductPosition> products = null;
 
         if (productName.length() != 0) {
-            products = DbManager.getInstance().getSqlMethods().selectProductsByName(productName);
+            products = userService.selectProductsByName(productName);
         } else if (idAsString.length() != 0) {
             int id = Integer.parseInt(idAsString);
-            products = DbManager.getInstance().getSqlMethods().selectProductsById(id);
+            products = userService.selectProductsById(id);
         }
 
         StringBuilder retrieveText = new StringBuilder();
 
-        if(products!=null){
+        if (products != null) {
             for (int i = 0; i < products.size(); i++) {
                 String name = products.get(i).getName();
                 int count = products.get(i).getCount();
@@ -157,6 +160,7 @@ public class Router {
                 .getPageByKey(StateMap.getInstance().getState(update.getMessage().getChatId()).toString())
                 .someProcess(retrieveText.toString(), update.getMessage().getChatId());
     }
+
     public SendMessage route(Update update) throws Exception {
 
         String chat_id = "";
