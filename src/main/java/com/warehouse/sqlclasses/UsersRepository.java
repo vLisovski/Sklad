@@ -5,10 +5,10 @@ import com.warehouse.entities.ProductPosition;
 
 import java.util.List;
 
-public class UserService {
-    private DbManager dbManager;
+public class UsersRepository {
+    private final DbManager dbManager;
 
-    public UserService() throws Exception {
+    public UsersRepository() throws Exception {
         try {
             dbManager = DbManager.getInstance();
         } catch (Exception e) {

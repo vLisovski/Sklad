@@ -49,3 +49,162 @@ Buttons: Order collected;Back to menu;
 2022-11-21 19:10:20,845	INFO	OUTPUT FOR chat_id 973712769:
 Text: Choose action:
 Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:08:02,937	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE null: /start
+2022-11-21 21:08:03,156	INFO	OUTPUT FOR chat_id 973712769:
+Text: /start
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:08:14,842	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: CURRENT_ORDERS
+2022-11-21 21:08:14,865	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+1 Люстра "Валерия" 1 шт. Диван "Greece" 1 шт.
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 21:08:40,031	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: MAIN_MENU
+2022-11-21 21:08:40,031	INFO	OUTPUT FOR chat_id 973712769:
+Text: Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:09:06,238	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: REMOVE_FROM_WAREHOUSE
+2022-11-21 21:09:06,239	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the name of the product to be removed according to the template:
+product_name number
+Buttons: no keyboard in this message
+2022-11-21 21:09:31,988	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE REMOVE_FROM_WAREHOUSE: Люстра "Валерия" 1
+2022-11-21 21:09:32,021	INFO	OUTPUT FOR chat_id 973712769:
+Text: Reducing the quantity of goods Люстра "Валерия" by 1 units completed.
+
+Choose action
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:09:44,473	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: REMOVE_FROM_WAREHOUSE
+2022-11-21 21:09:44,473	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the name of the product to be removed according to the template:
+product_name number
+Buttons: no keyboard in this message
+2022-11-21 21:09:54,420	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE REMOVE_FROM_WAREHOUSE: Диван "Greece" 1
+2022-11-21 21:09:54,445	INFO	OUTPUT FOR chat_id 973712769:
+Text: Reducing the quantity of goods Диван "Greece" by 1 units completed.
+
+Choose action
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:09:58,545	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: CURRENT_ORDERS
+2022-11-21 21:09:58,556	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+1 Люстра "Валерия" 1 шт. Диван "Greece" 1 шт.
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 21:10:02,022	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: ORDER_COLLECTED
+2022-11-21 21:10:02,022	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter order id:
+Buttons: no keyboard in this message
+2022-11-21 21:10:07,424	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE ORDER_COLLECTED: 1
+2022-11-21 21:10:07,438	INFO	OUTPUT FOR chat_id 973712769:
+Text: Order with 1 identification as collected and removed from the list of current.
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:10:16,857	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: CURRENT_ORDERS
+2022-11-21 21:10:16,868	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 21:10:30,578	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: MAIN_MENU
+2022-11-21 21:10:30,578	INFO	OUTPUT FOR chat_id 973712769:
+Text: Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:10:32,750	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: SEARCH_PRODUCT
+2022-11-21 21:10:32,751	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the product to be found by name or id:
+Buttons: no keyboard in this message
+2022-11-21 21:10:35,236	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE SEARCH_PRODUCT: Диван
+2022-11-21 21:10:35,248	INFO	OUTPUT FOR chat_id 973712769:
+Text: 15 Диван "Thunder" 50
+2 Диван "Greece" 9
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:10:42,171	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: SEARCH_PRODUCT
+2022-11-21 21:10:42,172	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the product to be found by name or id:
+Buttons: no keyboard in this message
+2022-11-21 21:10:49,021	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE SEARCH_PRODUCT: Люстра
+2022-11-21 21:10:49,032	INFO	OUTPUT FOR chat_id 973712769:
+Text: 1 Люстра "Валерия" 99
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:11:47,008	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: SEARCH_PRODUCT
+2022-11-21 21:11:47,008	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the product to be found by name or id:
+Buttons: no keyboard in this message
+2022-11-21 21:12:16,615	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE SEARCH_PRODUCT: 15
+2022-11-21 21:12:16,625	INFO	OUTPUT FOR chat_id 973712769:
+Text: 15 Диван "Thunder" 50
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:13:25,930	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: TASK_LIST
+2022-11-21 21:13:25,944	INFO	OUTPUT FOR chat_id 973712769:
+Text: 
+Протереть полы в пятом отделе
+Помыть окна в офисе
+Юре принять машину у первого терминала
+Андрею поднести бумагу в кадровый
+Buttons: no keyboard in this message
+2022-11-21 21:13:50,072	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE TASK_LIST: REMOVE_FROM_WAREHOUSE
+2022-11-21 21:13:50,072	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the name of the product to be removed according to the template:
+product_name number
+Buttons: no keyboard in this message
+2022-11-21 21:14:00,032	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE REMOVE_FROM_WAREHOUSE: /start
+2022-11-21 21:14:00,032	INFO	OUTPUT FOR chat_id 973712769:
+Text: /start
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:14:01,172	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: ADD_TO_WAREHOUSE
+2022-11-21 21:14:01,172	INFO	OUTPUT FOR chat_id 973712769:
+Text: Add to warehouse.
+Enter text according to the template:
+product_name number
+Buttons: no keyboard in this message
+2022-11-21 21:14:23,630	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE ADD_TO_WAREHOUSE: Светильник "Свет ночей" 69
+2022-11-21 21:14:23,654	INFO	OUTPUT FOR chat_id 973712769:
+Text: Product added Светильник "Свет ночей" 69 completed.
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:14:26,774	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: SEARCH_PRODUCT
+2022-11-21 21:14:26,774	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the product to be found by name or id:
+Buttons: no keyboard in this message
+2022-11-21 21:14:30,887	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE SEARCH_PRODUCT: Светильник
+2022-11-21 21:14:30,898	INFO	OUTPUT FOR chat_id 973712769:
+Text: 19 Светильник "Lumin" 120
+20 Светильник "Sun" 8
+21 Светильник "ProLight" 14
+22 Светильник "Свет ночей" 69
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 21:15:44,475	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: CURRENT_ORDERS
+2022-11-21 21:15:44,486	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 21:18:15,086	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: MAIN_MENU
+2022-11-21 21:18:15,086	INFO	OUTPUT FOR chat_id 973712769:
+Text: Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;

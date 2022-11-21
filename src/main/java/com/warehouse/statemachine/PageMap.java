@@ -1,14 +1,12 @@
 package com.warehouse.statemachine;
 
 import com.warehouse.entities.Order;
-import com.warehouse.sqlclasses.DbManager;
-import com.warehouse.sqlclasses.UserService;
+import com.warehouse.sqlclasses.UsersRepository;
 import com.warehouse.strings.Strings;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +14,10 @@ import java.util.Map;
 
 public class PageMap {
     private final Map<String, Processed> processes;
-    private final UserService  userService;
+    private final UsersRepository usersRepository;
 
     private PageMap() throws Exception {
-        userService = new UserService();
+        usersRepository = new UsersRepository();
         processes = new HashMap<>();
         processes.put(States.MAIN_MENU.toString(), this::mainMenuPage);
         processes.put(States.CURRENT_ORDERS.toString(), this::currentOrdersMenu);
@@ -100,7 +98,7 @@ public class PageMap {
     private SendMessage currentOrdersMenu(String text, long chat_id) throws Exception {
         SendMessage message = new SendMessage();
 
-        List<Order> orders = userService.selectOrders();
+        List<Order> orders = usersRepository.selectOrders();
 
         StringBuilder output = new StringBuilder();
         output.append("Current orders:\n");
@@ -189,7 +187,7 @@ public class PageMap {
     private SendMessage tasksList(String text, long chat_id) throws Exception {
         SendMessage message = new SendMessage();
 
-        List<String> tasks = userService.selectTasks();
+        List<String> tasks = usersRepository.selectTasks();
         String output="";
         for (int i = 0; i < tasks.size(); i++) {
             output = output + "\n" + tasks.get(i);

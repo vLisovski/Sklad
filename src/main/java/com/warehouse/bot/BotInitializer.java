@@ -13,6 +13,8 @@ public class BotInitializer extends TelegramLongPollingBot {
 
     //TODO API
     //TODO Parse
+    //TODO tovar in process
+    //TODO DbManager dependency injection
     private static final Logger logger = LoggerFactory.getLogger(BotInitializer.class);
 
     @Override

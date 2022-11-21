@@ -5,7 +5,7 @@ public class Strings {
     public final static String MAIN_MENU_BUTTON_1 = "Current orders";
     public final static String MAIN_MENU_BUTTON_2 = "Add to warehouse";
     public final static String MAIN_MENU_BUTTON_3 = "Remove from warehouse";
-    public static String MAIN_MENU_BUTTON_4 = "Search product";
+    public final static String MAIN_MENU_BUTTON_4 = "Search product";
     public final static String MAIN_MENU_BUTTON_5 = "Warehouse task list";
 
 

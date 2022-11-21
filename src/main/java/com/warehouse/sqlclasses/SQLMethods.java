@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLMethods {
-    Connection connection = null;
+    private final Connection connection;
 
     public SQLMethods(Connection connection) throws SQLException {
         this.connection = connection;
@@ -77,7 +77,7 @@ public class SQLMethods {
 
         Statement statement = connection.createStatement();
         String pfpf = "%" + name + "%";
-        String selectQuery = String.format("SELECT * FROM products WHERE name LIKE '%s' ", pfpf );
+        String selectQuery = String.format("SELECT * FROM products WHERE name LIKE '%s' ", pfpf);
         ResultSet resultSet = statement.executeQuery(selectQuery);
 
         while (resultSet.next()) {
@@ -93,13 +93,13 @@ public class SQLMethods {
     }
 
     public List<ProductPosition> selectProductsById(int id) throws SQLException {
-        int pId=0;
+        int pId = 0;
         int count = 0;
         String pName = "";
         List<ProductPosition> productPositions = new ArrayList<>();
 
         Statement statement = connection.createStatement();
-        String selectQuery = String.format("SELECT * FROM products WHERE id=%d",id);
+        String selectQuery = String.format("SELECT * FROM products WHERE id=%d", id);
         ResultSet resultSet = statement.executeQuery(selectQuery);
 
         while (resultSet.next()) {
@@ -128,7 +128,7 @@ public class SQLMethods {
             id = resultSet.getInt("id");
             description = resultSet.getString("description");
 
-            orders.add(new Order(id,description));
+            orders.add(new Order(id, description));
         }
 
         resultSet.close();
@@ -139,7 +139,7 @@ public class SQLMethods {
 
     public void deleteOrderById(int id) throws SQLException {
         Statement statement = connection.createStatement();
-        String deleteQuery = String.format("DELETE FROM orders WHERE id=%d",id);
+        String deleteQuery = String.format("DELETE FROM orders WHERE id=%d", id);
         statement.executeUpdate(deleteQuery);
         statement.close();
     }

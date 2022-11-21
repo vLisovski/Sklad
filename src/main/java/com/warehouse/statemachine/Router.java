@@ -1,7 +1,7 @@
 package com.warehouse.statemachine;
 
 import com.warehouse.entities.ProductPosition;
-import com.warehouse.sqlclasses.UserService;
+import com.warehouse.sqlclasses.UsersRepository;
 import com.warehouse.strings.Strings;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Router {
     private Router() throws Exception {
-        userService = new UserService();
+        usersRepository = new UsersRepository();
     }
 
     private static Router instance;
-    private UserService userService;
+    private final UsersRepository usersRepository;
 
     public static Router getInstance() throws Exception {
         if (instance == null) {
@@ -37,7 +37,7 @@ public class Router {
     private SendMessage routeOrderCollected(Update update) throws Exception {
         int id = Integer.parseInt(update.getMessage().getText());
 
-        userService.deleteOrderById(id);
+        usersRepository.deleteOrderById(id);
 
         String retrieveText = "Order with " + id + " identification as collected and removed from the list of current.\n\nChoose action:";
 
@@ -56,9 +56,9 @@ public class Router {
         String countAsString = receivedText.replaceAll("\\D", "").trim();
         int count = Integer.parseInt(countAsString);
 
-        if (!(userService.findProductByName(productName))) {
+        if (!(usersRepository.findProductByName(productName))) {
 
-            userService.insertProduct(productName, count);
+            usersRepository.insertProduct(productName, count);
 
             String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
             StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
@@ -68,9 +68,9 @@ public class Router {
 
         } else {
 
-            int currentCount = userService.selectProductCount(productName);
+            int currentCount = usersRepository.selectProductCount(productName);
 
-            userService.updateProduct(productName, currentCount + count);
+            usersRepository.updateProduct(productName, currentCount + count);
             String retrieveText = "Product added " + productName + " " + count + " completed.\n\nChoose action:";
             StateMap.getInstance().replaceState(update.getMessage().getChatId(), States.MAIN_MENU.toString());
 
@@ -87,14 +87,14 @@ public class Router {
         String countAsString = receivedText.replaceAll("\\D", "").trim();
 
         int count = Integer.parseInt(countAsString);
-        int currenCount = userService.selectProductCount(productName);
+        int currenCount = usersRepository.selectProductCount(productName);
         String retrieveText;
 
         if (!(count < currenCount)) {
-            userService.deleteProduct(productName);
+            usersRepository.deleteProduct(productName);
             retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed. Product has deleted.\n\nChoose action:";
         } else {
-            userService.updateProduct(productName, currenCount - count);
+            usersRepository.updateProduct(productName, currenCount - count);
             retrieveText = "Reducing the quantity of goods " + productName + " by " + count + " units completed.\n\nChoose action";
         }
 
@@ -112,10 +112,10 @@ public class Router {
         List<ProductPosition> products = null;
 
         if (productName.length() != 0) {
-            products = userService.selectProductsByName(productName);
+            products = usersRepository.selectProductsByName(productName);
         } else if (idAsString.length() != 0) {
             int id = Integer.parseInt(idAsString);
-            products = userService.selectProductsById(id);
+            products = usersRepository.selectProductsById(id);
         }
 
         StringBuilder retrieveText = new StringBuilder();
@@ -189,7 +189,7 @@ public class Router {
             }
         }
 
-        return new SendMessage(chat_id, "");
+            return new SendMessage(chat_id, "error");
     }
 
 }
