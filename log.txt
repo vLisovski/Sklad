@@ -1,0 +1,51 @@
+2022-11-21 19:09:06,086	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE null: /start
+2022-11-21 19:09:06,291	INFO	OUTPUT FOR chat_id 973712769:
+Text: /start
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 19:10:07,278	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: CURRENT_ORDERS
+2022-11-21 19:10:07,298	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+1 Люстра "Валерия" 1 шт. Диван "Greece" 1 шт.
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 19:10:09,744	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: MAIN_MENU
+2022-11-21 19:10:09,744	INFO	OUTPUT FOR chat_id 973712769:
+Text: Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 19:10:11,710	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: SEARCH_PRODUCT
+2022-11-21 19:10:11,710	INFO	OUTPUT FOR chat_id 973712769:
+Text: Enter the product to be found by name or id:
+Buttons: no keyboard in this message
+2022-11-21 19:10:15,310	INFO	INPUT MESSAGE FROM chat_id 973712769 WITH STATE SEARCH_PRODUCT: Плед
+2022-11-21 19:10:15,327	INFO	OUTPUT FOR chat_id 973712769:
+Text: 5 Плед "Polar" 50
+12 Плед "Snow" 10
+
+Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;
+2022-11-21 19:10:16,618	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE MAIN_MENU: TASK_LIST
+2022-11-21 19:10:16,632	INFO	OUTPUT FOR chat_id 973712769:
+Text: 
+Протереть полы в пятом отделе
+Помыть окна в офисе
+Юре принять машину у первого терминала
+Андрею поднести бумагу в кадровый
+Buttons: no keyboard in this message
+2022-11-21 19:10:19,769	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE TASK_LIST: CURRENT_ORDERS
+2022-11-21 19:10:19,779	INFO	OUTPUT FOR chat_id 973712769:
+Text: Current orders:
+1 Люстра "Валерия" 1 шт. Диван "Greece" 1 шт.
+5 Торшер "Stoyak" 5 шт. Светильник "Sun" 5 шт.
+6 Стул "Sidevshi" 2 шт. 
+7 Стол "Столяра" 1 шт. Стул "Dickracer" 3 шт.
+8 Стакан "Premium" 5 шт. Паракорд 5 шт.
+
+Buttons: Order collected;Back to menu;
+2022-11-21 19:10:20,844	INFO	INPUT CALLBACK FROM chat_id 973712769 WITH STATE CURRENT_ORDERS: MAIN_MENU
+2022-11-21 19:10:20,845	INFO	OUTPUT FOR chat_id 973712769:
+Text: Choose action:
+Buttons: Current orders;Add to warehouse;Remove from warehouse;Search product;Warehouse task list;

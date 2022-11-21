@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 public class BotInitializer extends TelegramLongPollingBot {
 
@@ -46,8 +47,20 @@ public class BotInitializer extends TelegramLongPollingBot {
 
         try {
             message = Router.getInstance().route(update);
-            logger.info(String.format("OUTPUT TEXT FOR chat_id %s: %s", message.getChatId(),
-                    message.getText()));
+            InlineKeyboardMarkup inlineKeyboardMarkup = (InlineKeyboardMarkup) message.getReplyMarkup();
+
+            String keyboardAsString = "no keyboard in this message";
+            if (inlineKeyboardMarkup != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (var keyboard : inlineKeyboardMarkup.getKeyboard()) {
+                    stringBuilder.append(keyboard.get(0).getText() + ";");
+                }
+
+                keyboardAsString = stringBuilder.toString();
+            }
+            logger.info(String.format("OUTPUT FOR chat_id %s:\nText: %s\nButtons: %s", message.getChatId(),
+                    message.getText(),keyboardAsString));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
