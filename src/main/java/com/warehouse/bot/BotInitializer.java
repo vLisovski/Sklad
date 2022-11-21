@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 public class BotInitializer extends TelegramLongPollingBot {
 
+    //TODO API
+    //TODO Parse
     private static final Logger logger = LoggerFactory.getLogger(BotInitializer.class);
 
     @Override
